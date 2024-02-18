@@ -1,13 +1,13 @@
 import "kaboom/global";
 import kaboom from "kaboom";
 
-const JUMP_FORCE = 900;
+const JUMP_FORCE = 1000;
 const SPEED = 4;
 
 
 kaboom({
   font: "sans-serif",
-  background: [100, 200, 255]
+  background: [100, 200, 255], 
 });
 
 loadSprite("bean", "src/sprites/bean.png");
@@ -20,7 +20,7 @@ const player = add([
 ]);
 
 add([
-  rect(width(), 48),
+  rect(300, 48),
   pos(0, height() -48),
   color(100, 200, 25),
   outline(4),
@@ -41,35 +41,23 @@ player.onKeyPress("space", () => {
   playerJumping();
 })
 
-add([
-  rect(200, 40),
-  pos(500, 1000),
-  color(100, 200, 25),
-  outline(4),
-  area(),
-  body({isStatic: true}),
-  "tile1"
-]);
+function generateRandomTiles() {
 
-add([
-  rect(200, 40),
-  pos(900, 1000),
-  color(100, 200, 25),
-  outline(4),
-  area(),
-  body({isStatic: true}),
-  "tile2"
-]);
+  for (let r = 0; r < 5; r++) {
+    add([
+      rect(200, 40),
+      pos(rand(1000), rand(4000)),
+      color(100, 200, 25),
+      outline(4),
+      area(),
+      body({isStatic: true}),
+      move(RIGHT, 100),
+      "tile"
+    ]);
+  }
+}
 
-add([
-  rect(200, 40),
-  pos(1300, 900),
-  color(100, 200, 25),
-  outline(4),
-  area(),
-  body({isStatic: true}),
-  "tile3"
-]);
+generateRandomTiles();
 
 player.onKeyDown("a", () => {
   player.pos.x -= SPEED;
@@ -79,46 +67,30 @@ player.onKeyDown("d", () => {
   player.pos.x += SPEED;
 });
 
-add([
-  circle(20),
-  pos(600, 960),
-  color(255, 255, 0),
-  outline(4),
-  area(),
-  body({isStatic: true}),
-  "coin",
-]);
 
-add([
-  circle(20),
-  pos(1000, 960),
-  color(255, 255, 0),
-  outline(4),
-  area(),
-  body({isStatic: true}),
-  "coin",
-]);
+function generateRandomCoins() {
+  for (let c = 0; c < 5; c++) {
+    add([
+      circle(20),
+      pos(rand(1000), rand(4000)),
+      color(255, 255, 0),
+      outline(4),
+      area(),
+      body({isStatic: true}),
+      "coin",
+    ]);
+  }
+}
 
-add([
-  circle(20),
-  pos(1400, 860),
-  color(255, 255, 0),
-  outline(4),
-  area(),
-  body({isStatic: true}),
-  "coin",
-]);
+generateRandomCoins();
 
 let SCORE = 0;
-
 
 const scoreBoard = add([
   text("Score:"),
   pos(50, 50),
   color(0, 0, 0),
 ]);
-
-
 
 player.onCollide("coin", (coin) => {
   destroy(coin);
